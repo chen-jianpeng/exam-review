@@ -13,6 +13,10 @@
         :panelContent="panelContent"
       ></toolbar>
     </div>
+
+    <div class="actions">
+      <i class="fa" :class="theme" @click="handleToggleTheme"></i>
+    </div>
   </div>
 </template>
 
@@ -37,6 +41,18 @@ export default {
     };
   },
   computed: {
+    theme: {
+      get() {
+        if (this.$store.state.theme === "dark-mode") {
+          return "fa-sun-o";
+        } else {
+          return "fa-moon-o";
+        }
+      },
+      set(theme) {
+        this.$store.commit("SET_THEME", theme);
+      }
+    },
     panelContentStyle() {
       return {
         transform: `translate(${this.panelContent.x}px, ${this.panelContent.y}px) scale(${this.panelContent.scale})`,
@@ -48,6 +64,12 @@ export default {
         cursor: this.panelContent.cursor + " !important"
       };
     }
+  },
+  created() {
+    this.$store.dispatch("initTheme");
+    window
+      .matchMedia("(prefers-color-scheme: dark)")
+      .addListener(e => (this.theme = e.matches ? "dark-mode" : "light-mode"));
   },
   mounted() {
     this.loadimg();
@@ -80,6 +102,10 @@ export default {
     document.onkeyup = null;
   },
   methods: {
+    handleToggleTheme() {
+      this.$store.commit("TOGGLE_THEME");
+    },
+
     loadimg() {
       let newImg = new Image();
       newImg.src = "/examPaper.jpg";
@@ -174,10 +200,11 @@ export default {
 
 <style lang="scss" scoped>
 .home {
+  position: relative;
   width: 100%;
   height: 100%;
   overflow: hidden;
-  background-color: --primary-bg;
+  background-color: var(--primary-bg);
   .toolbar-wrap {
     bottom: 80px;
     width: 100%;
@@ -202,6 +229,11 @@ export default {
         left: 0;
       }
     }
+  }
+  .actions {
+    right: 40px;
+    top: 20px;
+    position: fixed;
   }
 }
 </style>
