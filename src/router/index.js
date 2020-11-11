@@ -2,13 +2,16 @@ import Vue from "vue";
 import VueRouter from "vue-router";
 import Home from "../views/Home.vue";
 
+import withLoading from "@/utils/withLoading";
+import { getData } from "@/api/home";
+
 Vue.use(VueRouter);
 
 const routes = [
   {
     path: "/",
     name: "Home",
-    component: Home
+    component: withLoading(Home, () => getData("test"))
   }
 ];
 

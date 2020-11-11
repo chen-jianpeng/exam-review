@@ -28,6 +28,11 @@ export default {
   components: {
     Toolbar
   },
+  props: {
+    result: {
+      type: Object
+    }
+  },
   data() {
     return {
       canvas: null,
@@ -126,8 +131,8 @@ export default {
       };
     },
     sizeContain() {
-      const panelWidth = this.$refs.panel.clientWidth;
-      const panelHeight = this.$refs.panel.clientHeight;
+      const panelWidth = this.$refs?.panel?.clientWidth;
+      const panelHeight = this.$refs?.panel?.clientHeight;
       const { width: imageWidth, height: imageHeight } = this.imageSize;
       const xScale = panelWidth / imageWidth;
       const yScale = panelHeight / imageHeight;
